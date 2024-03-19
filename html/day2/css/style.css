@@ -1,0 +1,53 @@
+body {
+  padding: 0 20px;
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: rgba(100, 189, 178, 0.8);
+}
+
+h1 {
+  max-width: 300px;
+  width: 100%;
+  font-size: 18px; /* px은 픽셀이란 의미입니다. 기본 글씨 크기는 16픽셀임 */
+  color: #333;
+  font-weight: 600;
+  margin: 20px auto;
+  padding: 16px 24px;
+  border: 3px solid #fff;
+  border-radius: 20px;
+}
+p {
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+img {
+  display: block;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+ul li {
+  margin-top: 10px;
+}
+ul li:first-child {
+  margin-top: 0;
+}
+ul li a {
+  display: block;
+  max-width: 300px;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 auto;
+  padding: 20px 0;
+  border-radius: 8px;
+  background: #ce8a8a;
+  transition: all 0.4s;
+}
+ul li a:hover {
+  background: #f56565;
+}

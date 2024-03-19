@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- css 작성 3가지 방법 -->
+    <!--  
+        1. 외부 css 파일 만들어서 링크 걸기 
+        2. style 태그로 감싸서 css 컨텐츠를 쓴다.
+        3. 개별 태그로 가서 css를 작성한다.
+    -->
+    <title>Document</title>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- 
+        개발자가 의도한 디자인 효과만을 남기고
+        html 태그가 가진 의도치 않은 디자인 효과는 제거해야한다. 
+        의도치않은 디자인효과를 없애기 위한 css 양식을
+        reset.css 양식이라 한다.
+
+        reset css 사용 시 주의사항!!!!!
+        css는 나중에 온 친구가 우선권을 가집니다.
+        reset css는 내가 맨땅에서 만들지 x -> 인터넷에서 받기
+        이걸 적용하면 글자의 크기가 균일해지고 요소 사이 여백 스타일이 사라집니다.
+
+        ---------------------------------------------------------------------
+
+        block의 특징 : 
+        -배치방식 : 가로폭을 채우고 세로로 쌓인다
+        -폭과 높이 지정 : 너비와 높이 지정 가능 (width & height)
+        -여백 지정 : (박스간 여백) margin & (컨텐츠와 박스의 여백) padding 을 네 방향으로 지정
+
+        inline의 특징 :
+        -배치방식 : 가로로 나란히 배치
+        -폭과 높이 지정 : 지정 안됨, 컨텐츠 내용에 따라 변한다.
+        -여백 지정 : margin & padding 좌우로만 지정가능
+
+    -->
+
+    <h1>카피조우</h1>
+    <p>
+      <img src="assets/images/pic.png" alt="카피조우 증명사진" />
+    </p>
+    <p>
+      당근 농장을 운영하고 있습니다.<br />
+      편하게 팔로우해 주세요!
+    </p>
+    <ul>
+      <li><a href="#">Capitter</a></li>
+      <li><a href="#">Capistagram</a></li>
+      <li><a href="#">Capybook</a></li>
+    </ul>
+
+    <script>
+      i = 0;
+      j = 0;
+      setInterval(() => {
+        i += 1;
+        console.log(i);
+
+        if (i === 20) {
+          j += 1;
+          console.log(j + "회 반복중");
+          location.reload();
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>

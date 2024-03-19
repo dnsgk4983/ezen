@@ -1,0 +1,225 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v5.0.2 | 20191019
+   License: none (public domain)
+*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+  display: none;
+}
+
+body {
+  line-height: 1;
+}
+
+menu,
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+body {
+  font-family: "Noto Sans KR", Arial, Helvetica, sans-serif;
+}
+
+.innerWrap {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.kv-wrapper {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+}
+.kv-wrapper .swiper-slide {
+  position: relative;
+  width: 100%;
+}
+.kv-wrapper .swiper-slide img {
+  width: 100%;
+}
+.kv-wrapper .swiper-slide:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.66);
+}
+.kv-wrapper .swiper-pagination {
+  z-index: 50;
+}
+.kv-wrapper .swiper-pagination-bullet {
+  width: 40px;
+  height: 10px;
+  cursor: pointer;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.7);
+}
+.kv-wrapper .swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+nav {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 20px;
+}
+nav .logo a {
+  color: #fff;
+  font-style: 24px;
+  font-weight: 600;
+}
+nav ul {
+  display: flex;
+  align-items: center;
+}
+nav ul li {
+  margin: 0 10px;
+}
+nav ul li a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}/*# sourceMappingURL=style.css.map */

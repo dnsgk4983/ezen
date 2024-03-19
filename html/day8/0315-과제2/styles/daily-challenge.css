@@ -1,0 +1,28 @@
+body {
+  margin: 50px;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100px;
+  border: 2px solid #333;
+}
+
+#todays-challenge {
+  color: #333;
+  font-weight: bold;
+  font-size: 52px;
+}
+
+.challenge-box {
+  max-width: 1000px;
+  margin: -100px auto 60px;
+  padding: 110px 40px 40px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: pink;
+}
+.challenge-box h1 {
+  font-size: 28px;
+}

@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  color: #fff;
+  background-color: #333;
+}
+
+span {
+  display: block;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+.wrap {
+  padding: 20px;
+}
+
+.main-content {
+  margin-top: 36px;
+}
+.main-content p {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.main-content span {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.sub-content {
+  margin-top: 20px;
+}
+.sub-content p {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.sub-content ul li {
+  line-height: 1.4;
+  list-style: none;
+}

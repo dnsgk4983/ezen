@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS3 Selector Basic Page</title>
+    <style>
+      /* id 속성값으로 header를 가지는 태그의 스타일을 지정합니다. */
+      #header {
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        background: red;
+      }
+
+      /* id 속성값으로 wrap을 가지는 태그의 스타일을 지정합니다. */
+      #wrap {
+        position: relative;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+      }
+      #wrap::after {
+        content: "";
+        clear: both;
+      }
+
+      /* id 속성값으로 aside를 가지는 태그의 스타일을 지정합니다. */
+      #aside {
+        float: left;
+        width: 25%;
+        background: blue;
+      }
+
+      /* id 속성값으로 content를 가지는 태그의 스타일을 지정합니다. */
+      #content {
+        float: left;
+        width: 75%;
+        background: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>Header</h1>
+    </div>
+    <div id="wrap">
+      <div id="aside">
+        <h1>Aside</h1>
+      </div>
+      <div id="content">
+        <h1>Content</h1>
+      </div>
+    </div>
+  </body>
+</html>
