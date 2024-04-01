@@ -1,0 +1,11 @@
+merge 할 때 순서
+1. git switch main [ 메인 브랜치로 간다 ]
+2. git merge 복사본 이름 [ 이렇게 합친다 ]
+3. 코드변경사항을 최종 결정하고 git add . & git commit
+4. push로 내 계정에 올린다.
+
+rebase 할 때 순서
+1. git switch 복사본 이름 [복사본으로 이동한다]
+2. git rebase main 복사본을 중심으로 main 저장소를 합쳐버린다.
+3. 코드 변경사항 최종 결정 후 커밋
+4. push로 내 계정에 올린다.

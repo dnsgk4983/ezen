@@ -1,0 +1,70 @@
+body {
+  color: rgb(68, 68, 68);
+  background: linear-gradient(30deg, rgb(77, 77, 77), rgb(58, 58, 58));
+}
+
+#page-logo a {
+  color: rgb(183, 230, 235);
+}
+
+header {
+  position: static;
+}
+
+header a {
+  color: rgb(183, 230, 235);
+}
+header nav a:hover {
+  color: rgb(59, 59, 59);
+  background: rgb(183, 230, 235);
+}
+
+main ul {
+  display: grid;
+  width: 1200px;
+  margin: 0 auto 48px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 20px;
+}
+
+main ul li {
+  display: flex;
+  border-radius: 6px;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}
+main ul li img {
+  width: 300px;
+  height: 280px;
+  object-fit: cover;
+}
+/* 3번째 li 태그에 한해서 1번 라인에서 2칸을 차지하게 해달라는 말입니다. */
+li:nth-of-type(3) {
+  grid-row: 2/3;
+  grid-column: 1 / span 2;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+}
+.item-content h2 {
+  text-transform: uppercase;
+  margin: 0;
+}
+.actions {
+  text-align: right;
+}
+.actions a {
+  text-decoration: none;
+  color: rgb(22, 211, 228);
+  border-radius: 5px;
+  padding: 6px;
+}
+.actions a:hover {
+  color: rgb(67, 67, 67);
+  background: rgba(235, 253, 255);
+}

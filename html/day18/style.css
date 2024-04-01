@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #666;
+}
+
+div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+button {
+  width: 240px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 8px 0;
+  padding: 16px 0;
+  border: 1px solid #333;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+button:hover {
+  background: white;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>input</title>
+  </head>
+  <body>
+    <form name="frm">
+      <input type="text" name="id" />
+      <input type="password" name="pw" />
+
+      <input type="button" value="제출" onclick="submitForm()" />
+    </form>
+
+    <script>
+      function submitForm() {
+        let id = document.frm.id.value;
+        let pw = document.frm.pw.value;
+
+        const formData = document.createElement("div");
+        formData.setAttribute("class", "formData");
+        formData.innerHTML = `<big>당신의 ID 값은 : ${id} 이며, <br> 당신의 PW값은 : ${pw} 입니다.</big>`;
+        document.body.appendChild(formData);
+      }
+    </script>
+  </body>
+</html>

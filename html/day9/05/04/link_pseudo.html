@@ -4,20 +4,18 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>skew</title>
+    <title>링크 가상 클래스</title>
     <style>
-      div {
-        width: 100px;
-        height: 100px;
-        background-color: red;
-        margin: 20px;
+      a:link {
+        color: orange;
       }
-      div:hover {
-        transform: skew(0, 120deg);
+      a:visited {
+        color: green;
       }
     </style>
   </head>
   <body>
-    <div></div>
+    <a href="https://www.yahoo.com">야후</a>
+    <a href="https://www.google.com">구글</a>
   </body>
 </html>

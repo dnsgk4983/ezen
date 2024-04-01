@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transition</title>
+    <style>
+      .red-box {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        transition-property: background-color, transform, width;
+        transition-duration: 1.5s;
+        transition-timing-function: ease-in-out;
+      }
+      .red-box:hover {
+        width: 500px;
+        transform: rotate(45deg) translate(150px, 150px);
+        background-color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="red-box"></div>
+  </body>
+</html>
