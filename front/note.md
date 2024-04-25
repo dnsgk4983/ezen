@@ -253,3 +253,173 @@ html의 폼태그는 method="get"
 routes 폴더 이름은 바뀌면 안됩니다.
 몇몇 하위 폴더 친구들은 이름이 바뀌면 인식이 안됩니다.
 vscode 상의 색이 바뀌는 폴더들은 사연이 있는 친구들입니다.
+
+<!-- 20240425 -->
+server: mysql 그 자체 ( 커맨드라인으로 일일이 명령어를 쳐야한다. )
+workbench: sql 화면 보여주면서 작업을 가능하게 합니다.
+samples and examples: 실습할 샘플 데이터를 제공해줍니다.
+documentation: 메뉴얼입니다.
+
+sql을 하는 이유
+sql같은 프로그램을 DBMS(Data Base Management System) 이라합니다.
+
+DBMS 중에 테이블간 연계가 가능한 것을 관계형 DBMS라 합니다. mySQL은 관계형 DBMS
+
+<!--  -->
+TABLE안의 KEY 값을 이용해서 다른 테이블 간의 "관계" 를 설명할 수 있는것을 관계형 데이터베이스라고 한다.
+사번정보가 존재하는 데이텀나 합치기 등 각종 데이터간의 "관계"를 설명하는것이 핵심이다.
+
+모든 정보를 한테이블에 때려 넣으면 데이터 테이블 내 빈값이 너무 늘어난다.
+
+테이블 내 일부 정보만 필요한 데이터가 빈공간을 차지한다.
+-> 데이터의 0값은 하드 디스크의 공간을 낭비한다.
+-> 느려진다.
+
+SQL 데이터 설계의 목표가 가능하면 빈공간 차지하는 잉여데이터값의 최소화
+회원테이블, 직원테이블, 구매테이블, 물품테이블 같이 테이블 정보를 나눠서
+필요한 내용을 필요한 만큼의 공간에 집어넣는게 핵심
+
+<!--  -->
+좌측 하단의 schemas 탭 클릭 후 빈공간에 대고 create schema
+테이블 데이터가 소속될 schema를 생성
+shop_db라고 입력하고 선택옵션은 utf8mb4
+
+아래 명령어는 sql 쿼리문입니다.
+우리가 클릭해서 정한거를 프로그램에서 sql 쿼리문으로 변환한 내용입니다.
+CREATE SCHEMA `shop_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+workbench란 프로그램의 특징 : CLI(Command Line Interface)가 불편하니 GUI(Graphic User Interface)로 사용하기 위한 소프트웨어
+
+데이터베이스의 삭제는 삭제할 DB가서 우클릭하고 DROP SCHEMA를 눌러주면 됩니다.
+
+table 우클릭 후 create table 고르고 table name에 member라고 입력합니다.
+sql은 윈도우에서 대소문자 구분을 안합니다.
+운영체제별 특징
+윈도우 : 구분 안한다.
+맥 : 구분을 하진 않지만 대소문자 정보를 따로 저장한다.
+리눅스 : 대소문자 구분을 한다.
+
+table_name 에 member_id라 입력하고, datatype을 CHAR() 를 고른다. 그리고 CHAR(8) 이라고 정정한다.
+CHAR(8) - 8글자로 이루어진 문자 데이터입니다.
+
+pk, nn, uq, ai, un --> 데이터의 속성을 나타냅니다.
+pk - primary key: 데이터 관계를 설명하는 값으로 그 데이터가 메인으로 가지는 구분자이다. 각 테이블에서 primary key는 하나만 쓸 수 있다.
+     중복 및 빈 데이터를 허용하지 않는다.
+     쿠팡 고객정보 테이블을 상상하자. 고객별 id가 primary key의 예시
+     고객별 id 특징: 중복 허용 안함, 고유값 존재, 빈칸은 있을 수 없다.
+     위 조건을 만족하는 데이터열을 primary key로 사용가능하다.
+
+nn - not null: 빈값을 허용하지 않는다.
+     pk 속성을 가지면 거의 자동으로 nn 속성을 가진다.
+     기업에서는 사번, 나라에선 민증번호, 쿠팡에선 로그인 아이디 등이 좋은 primary key의 예시이다.
+
+uq - unique: 고유값을 가진다.
+
+pk, nn, uq
+ai - auto increment : 데이터 자동증가, 유저가 따로 입력해주지 않아도 해당행에 데이터가 있다면 자동으로 값을 채워준다.
+     좋은 예시는 금일 방문 손님 수 - 자동으로 손님 데이터가 들어오면 번호를 하나씩 증가시키며 번호를 매겨준다.
+
+
+member_id : pk, nn id니까 고유값으로 설정
+member_name : nn 이름은 동명이인 가능하지만 빈값은 허용하지 않는다
+member_addr : 주소는 입력하기 싫으면 안해도 되도록
+
+# shop_db 내부에 member라는 테이블을 만들어서
+# 3개의 컬럼 생성 후
+# primary key는 member_id 열이 맡는다
+# 모든 테이블은 반드시 하나의 primary key 열을 가져야한다.
+CREATE TABLE `shop_db`.`member` (
+  `member_id` CHAR(8) NOT NULL,
+  `member_name` CHAR(5) NOT NULL,
+  `member_addr` CHAR(29) NULL,
+  PRIMARY KEY (`member_id`));
+
+아직 테이블 데이터를 넣지 않았기 때문에 빈 테이블로 보이게 됩니다.
+테이블 내 정보를 열람하는 쿼리문입니다.
+우클릭하면 쿼리를 만들어줘서 열람 할 수 있습니다.
+shop_db.member --> shop_db 데이터 베이스 안에 member 테이블로 부터 모든 컬럼 정보를 보여달라
+SELECT * FROM shop_db.member;
+SELECT 컬럼이름 FROM 스키마.테이블 이름;
+
+sql 주의사항 : 쿼리문 안에 마우스 드래그 된 부분이 있으면 마우스 드래그 된 코드가 부분적으로 실행된다.
+              즉 코드를 잘 짜도 드래그 이상한데 해놓으면 오류난다.
+
+쿼리문에서 schema 선택방법은 몇가지가 있다.
+1. schema를 더블클릭해서 볼드 글씨가 나오면 해당 schema를 선택 한 것으로 SELECT * FROM member; 이렇게만 해도 문제가 없다.
+2. use 스키마이름; 이렇게해서 스키마를 미리 선택해둔다.
+3. SELECT * FROM shop_db.member; 스키마를 직접 입력한다.
+
+fk : 다른테이블의 인덱스 값을 받아오는 데이터 매칭 시키는 역할
+     foreign key 즉 외래키라고도 한다.
+     외래키는 한 테이블에 여러개 있어도 된다. 다수의 테이블이 참고 할 수 있기 때문이다.
+     두 테이블 외에 직원 테이블이 있고 직원의 사번이 primary key이고 그걸 받아서
+     직원가에 물건을 사는 구매테이블 정보가 있다고 치자.
+     그러면 아까 구매데이터 테이블이 사번을 읽는 열 정보, 즉 또다른 foreign key를 만들면 된다.
+
+fk는 한 테이블에 여러개 있을 수 있고
+데이터가 null값, 즉 존재하지 않아도 된다.
+
+FOREIGN KEY (mem_id) REFERENCES member(mem_id)
+지금 테이블의 mem_id는 옆 테이블 mem_id 정보와 매칭하여 데이터를 식별한다.
+전화번호 있는 데이터만 혹은 전화번호 데이터 망가진 데이터만 선택해서 불러낼 수 있다.
+
+sql은 상당히 오래된 소프트웨어라서 아무리 다국어 처리하고 조심해도 한글이 깨지는 경우가 많습니다.
+그래서 sql을 많이 쓰는 직장은 한글 데이터를 넣지않습니다.
+
+데이터를 선택하여 저장할 때
+USE market_db -- 스키마를 선택합니다.
+select 컬럼1, 컬럼2, 컬럼3 from 테이블 이름 -- 데이터 열람 방법
+
+데이터를 *로 부르면 다 좋은데 데이터가 크면 너무 느리다.
+원하는 조건만 보고싶다. 아까처럼 열 데이터는 그대로인 채로 원하는 조건만 뽑아서 보고자 한다면?
+
+SELECT * FROM 테이블이름 where 조건열 = 원하는데이터;
+그룹 멤버가 4명인 걸그룹 데이터만 추리려고 한다면?
+SELECT * FROM member where mem_number = 4;
+<, > 이거는 관계 연산자이고 and, or 이런건 논리연산자라 합니다.
+sql은 관계연산자 논리연산자 전부 지원함
+SELECT * FROM member where (height > 162 and mem_number < 5 );
+
+날짜데이터의 경우 date() 로 감싸주시면 날짜라고 인식합니다.
+SELECT * FROM member where date(debut_date) < '2015-01-01';
+
+이렇게 입력하면 안됩니다.
+SELECT * FROM member where 106 < height < 165;
+(같은의미) SELECT * FROM member where height between 160 and 165;
+
+이렇게 고쳐서 하면 됩니다.
+SELECT * FROM member where 160 < height and height < 165;
+
+에이핑크보다 키 큰 걸그룹을 뽑을 수 없나?
+차은우보다 키 큰 연예인, 문제는 내가 차은우 키를 몰라
+1. 에이핑크 키 데이터를 뽑는다.
+SELECT height from member where mem_name = '에이핑크'; --> 164
+2. 164 라고 알아냈으니 아래와 같이 쿼리문 작성
+-- SELECT mem_name, height from member where height > 164
+
+서브쿼리가 여러분의 직장 라이프를 돕습니다.
+서브쿼리는 쿼리문 안에 쿼리문이란 뜻입니다.
+
+SELECT mem_name, height from member where height > (SELECT height from member where mem_name = '에이핑크');
+
+비즈니스에서 성과별, 실적별 나열은 order by, (순서를 매긴다)
+비즈니스팀 별 총 성과급 지급액은 group by (그룹화 한다)
+
+--> 데뷔일 순으로 나열하기
+--> 2017년에 데뷔한 그룹찾기
+
+order by 구문을 통해 키순으로 세웠다. 같은 키라면 데뷔일이 바른 선배님을 앞에 모시고 싶다면? --> 콤마찍고 그 다음 분류 순서를 주면 된다.
+
+order by height desc, debut_date asc --> 맨 앞 기준으로 세우고 맨 앞 기준이 변하지 않는 범위에서 그 다음 기준으로 분류. 빅데이터라면 세번째 네번째 기준도 만들어 쓸 수 있다.
+
+-- SELECT mem_id, sum(amount) FROM market_db.buy group by mem_id;
+-- SELECT * FROM market_db.buy
+
+# 모든 구매기록에 대한 총 구매금액
+-- SELECT mem_id, sum(price*amount) FROM market_db.buy group by mem_id;
+# 한번 구매 시 평균 금액
+-- SELECT mem_id, avg(price*amount) FROM market_db.buy group by mem_id;
+-- SELECT count(*) FROM market_db.buy;
+
+-- 특정 컬럼에서 데이터가 온전한 것만 개수를 센다.
+-- 그래서 count(*) 랑 결과가 달라질수있다.
+SELECT count(group_name) FROM market_db.buy;
