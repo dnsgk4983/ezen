@@ -423,3 +423,357 @@ order by height desc, debut_date asc --> 맨 앞 기준으로 세우고 맨 앞 
 -- 특정 컬럼에서 데이터가 온전한 것만 개수를 센다.
 -- 그래서 count(*) 랑 결과가 달라질수있다.
 SELECT count(group_name) FROM market_db.buy;
+
+<!-- 20240426 -->
+sql의 특징: 
+1. 여러계정이 동시에 활동이 가능하다
+그래서 sql파일을 더블클릭하면 별도의 로그인 하지 않은 계정에서 그냥 열립니다
+여러분의 로그인 된 계정과 아무 상관없어짐
+2. 한계정에서 여러개의 db생성가능 
+market_db, shop_db 이렇게 다수의 데이터베이스 구축 가능
+3. 관계형 데이터베이스: 여러개의 테이블이 지정된 관계를 가지고 데이터를 엮을 수 있다. - 직원테이블, 고객테이블, 구매기록테이블
+
+"관계형 데이터베이스는 설계가 중요하다" 
+적당한 데이터 배치와 테이블 개수 설정으로 빈 데이터 적재를 최소화 한다
+테이블간의 관계는 primary key & foreign key로 연결할 데이터를 지정한다
+primary key: 테이블 안에 하나만 지정가능, 중복안됨, 비어있어도 안됨
+예시) 고객 아이디, 회사 사번, 민증번호
+
+foreign key: primary key가 지정한 데이터에 대한 매칭 데이터
+한 테이블에 여러개가 있을수도 있고 테이블간 교류가 없다면 foreign key는 없어도 되. 빈데이터도 허용해
+
+
+다만 기 생성된 스키마를 다시 만들라 하면 오류가 나니까
+이미 스키마가 존재하면 날리라고 먼저 명령해줌
+DROP DATABASE IF EXISTS market_db777;
+데이터 베이스(스키마) 생성은 아래와 같이 간단하다.
+CREATE DATABASE market_db777;
+
+특정 스키마의 테이블을 부르려면 스키마 지정을 해야한다.
+아래처럼만 하면 오류가 나는데 이유는 어느 스키마에 소속된 member테이블인지 모르기 때문이다
+CREATE TABLE member;
+스키마 지정방법 3가지
+1. 스키마를 더블클릭해서 볼드표시확인한다 - 이 스키마를 쓰겠다
+2. use 스키마 이름  use market_db - 쿼리문으로 사용할 스키마 지정
+3. 일일히 스키마 달아주기 CREATE TABLE market_db.member; 
+
+primary key는 원칙적으로 중복되면 데이터 식별이 어려우므로
+중복데이터가 없어야 하는데 같은 key값의 분 단위 데이터라고 가정해 보자
+
+AUTO_INCREMENT는 데이터가 비지 않도록 1씩 자동으로 값을 증가시키며 데이터를 채운다. - primary key 종특 다른데이터는 비어있는게 정답인 경우가 대다수이므로 함부로 써서도 안되고 그냥 쓰지마
+
+select 보고싶은_컬럼 이름 from 테이블_이름 where 조건
+select * from member; member테이블 안에 모든 컬럼정보 출력
+근데 member 테이블안에 데이터가 너무 많아서 자료의 열람조차도 시간이 너무 걸리는 경우
+--> limit 5 써서 5줄까지만 나오도록 한다
+select * from member limit 5;
+그룹 멤버가 4명인 그룹만 나오게 하려면?
+select * from member where mem_number = 4;
+'where 조건' - 여기는 비교연산자(<, >) & 논리연산자(and, or) 
+전부 가능. 아래 참고해서 3명이상 5명이하 결과 뽑아 보세요
+select * from member where mem_number = 4;
+select * from member where mem_number >= 3 and mem_number <= 5;
+데뷔일이 2015년 이전인 선배가수만 모셔옴
+날짜 데이터는 문자데이터 처럼 홀따옴표로 감싸주세요
+select * from member where date(debut_date) < '2015-01-01';
+이러시면 아니되옵니다...
+select * from member where 160 < height < 165;
+
+select * from member where 160 < height and height < 165;
+서로 다른 분류기준도 동시에 사용 가능
+select * from member where height < 165 and mem_number < 5;
+서브쿼리: (쿼리안에 쿼리)
+-->에이핑크보다 평균 키가 큰 걸그룹데이터를 알고싶다면?
+1. 에이핑크 평균 키 데이터를 뽑는다
+select height from member where mem_name='에이핑크'; 164
+2. 164보다 키 큰 걸그룹데이터를 뽑는다
+select mem_name, height from member where height > 164;
+이러면 야근각인데... 한번에 하는 방법은 없을까?
+서브쿼리의 핵심은 뭐다? 비교 대상의 결과데이터를 알지 못할때
+--> 비교대상의 데이터값을 모르고 비교대상만을 아는경우사용
+select mem_name, height from member where height >
+(select height from member where mem_name='에이핑크' ) ;
+
+order by, 정렬
+group by, 그룹화
+분단위로 측정하면 데이터 4800만건
+시간단위로 60분 평균내서 측정하면? 4800/60 = 80만건
+일단위로 활동량 데이터 평균내서 group by한다면?
+80/24 = 3.xx만건
+원래는 아래처럼 써야 하는데 in 구문으로 단순화 가능
+select * from member where addr = '경기' or addr='전남' or addr='경남' ;
+select * from member where addr in( '경기' , '전남', '경남') ;
+'오'로 시작하는 걸그룹 이름을 알고 싶다면 (%는 아무데이터란 뜻)
+select * from member where mem_name like '오%';
+오% 오렌지캬라멜
+아래코드는 되지 않습니다. 왜? like와 in 은 같이 못써요
+select * from member where mem_name like in('오%', '에%');
+걸그룹 이름이 '오'로 시작하거나 '에'로 시작하는 그룹찾기
+select * from member where 
+    mem_name like '오%' 
+or mem_name like '에%';
+
+데뷔일 기준, 내림차순으로 데이터 정리
+order by debut_date 이게 데뷔일 기준으로 정렬해달란 의미
+desc가 내림차순의 의미입니다
+select mem_id, mem_name, debut_date 
+from member order by debut_date desc;
+내림차순 오름차순 설정 빼먹으면? 오름차순이 기본값이다.
+
+데뷔일 기준, 내림차순으로 데이터 정리할때 키 164이상을 뽑고 싶다면?
+select mem_id, mem_name, debut_date, height 
+from member where height >= 164 
+order by debut_date desc ;
+
+-- where구문은 order by 앞으로 가야 합니다
+특정 컬럼에서 중복값을 제거하고 보고싶을때?
+예) 고객구매데이터에서 고객명수만 확인하고싶을 때
+# 중복값을 빼고 싶을 때
+-- select distinct addr from member;
+
+합계금액 1000이상 구매자를 회원 아이디 별로 "내림차순"으로 정렬
+group by, having, order by가 함께 쓰인 예제였습니다.
+특징에 대해서 짚고 넘어가자면, group by등으로 집계된 결과는
+where구문을 쓸 수 없습니다. where말고 같은 기능의 having을 쓰셔야 합니다. 그리고 where가 아닌 having이므로 group by 뒤에 와야 합니다
+order by는 맨 나중에 위치하게 되었습니다.
+데이터 집계 -> 조건을 따진 후에 (결과데이터를 결정한 후에)-> 정렬 
+SELECT mem_id "회원 아이디", sum(price*amount) "총 구매금액"
+FROM market_db.buy 
+group by mem_id 
+having sum(price*amount) > 1000
+order by sum(price*amount) desc;
+
+dump project folder --> 백업 자료가 개별 파일들로 쪼개져서 백업
+self-containerd file --> 하나의 sql 파일로 백업됨
+Include create schema --> 이거 클릭해두면 스키마 이름까지 만들어주고 이거 안하면 직접 스키마 이름 입력해야함.
+
+다른 데이터 베이스의 테이블 정보도 무리없이 가져 올 수 있습니다.
+insert into city_popul 
+select toy_name, age
+from market_db.hongong1;
+
+데이터를 삭제 할 때 3가지 방법이 있습니다.
+편의성과 성능은 반비례합니다.
+
+<!-- 20240429 -->
+데이터 설계 --> 조인
+데이터 추가, 수정, 삭제 --> 중복입력이 가능
+클릭 한번에 데이터가 중복이 들어오기 쉽다.
+
+(아래는 이전에 만들려고 했던 데이터에 대한 내용이다.)
+use world;
+-- # 내가 원하는 정보만을 담을 테이블을 새로 만듭니다. 도시이름과 인구정보네요.
+drop table if exists city_popul;
+create table city_popul (city_name char(35), population int);
+insert into city_popul select name population from city;
+
+# 데이터의 수정은 동시에 진행가능합니다.
+# city_name 컬럼의 new york 이란 데이터를 한글 뉴욕으로 고치고
+# 인구수도 0으로 데이터의 변경이 가능하다.
+-- update city_popul set city_name = '뉴욕',
+-- population = 0 where city_name = 'new york';
+
+SQL 쿼리문은 누적되어 실행된다.
+마우스 드래그를 잘해서 원하는 쿼리문만 돌리던지 아니면 코멘트 처리해두던지
+근데 웬만하면 데이터 생성 쿼리문은 별도의 파일에 작업하자
+
+테이블간의 결합을 시키는 JOIN 문을 배울 때
+PRIMARY KEY & FOREIGN KEY와의 관계 유형에 대해 자세히 다룰 예정
+1:N 관계(1대 다) N:N관계(다대 다) 
+--> IOT 장비를 채워서 분당 강아지 활동량 측정 N:N관계(다대 다)
+--> GROUP BY로 데이터를 1일 데이터 등으로 변환하여 1:N 관계(1대 다)의 관계로 실무에서 처리하는 경우가 있다.
+
+SQL 잘하면 대우가 좋다
+수억줄의 데이터에 대한 관계를 설계하고, 테이블을 구성하고 데이터 속성에 따른 데이터 가공, 처리, 1:N등의 관계 변환 등, 데이터를 원하는 목적에 따라 연결해야 하므로
+
+테이블이 복잡하면 한번에 정보를 가져 올 수 없습니다.(서브쿼리)
+에이핑크보다 키 큰 사람들을 뽑고싶다. (에이핑크는 아는데 그 사람들의 키는 몰라)
+1. 에이핑크의 키를 찾습니다.
+SELECT height FROM member WHERE mem_name = '에이핑크'; --> 164
+2. 164보다 키 큰 사람들을 불러냅니다.
+SELECT mem_name, height FROM member WHERE height > 164;
+일을 한번에 하고싶을때 서브쿼리 사용합니다.
+
+실무에서 테이블간 연결이 되지 않은 사례가 있습니다. JOIN 문 등으로 일할 수 없는 경우
+서브쿼리로 필요한 결과를 뽑아서 그 결과를 조건문에 걸어서 처리합니다.
+SELECT mem_name, height FROM member WHERE height >
+(SELECT height FROM member WHERE mem_name ='에이핑크');
+
+데이터의 정렬 => order by,
+데뷔일 기준으로 내림차순으로 정리하는 경우 (desc) 내림차순 안쓰면 오름차순이 기본 설정
+order by 는 where 뒤에 와야합니다. 데이터의 맥락을 생각하시면 순서이해가 됩니다.
+SELECT mem_id, mem_name, debut_date FROM member WHERE height > 164 order by debut_date desc
+
+데이터의 집계 => group by,
+개별 구매 데이터를 목적에 맞게 가공하고 싶을 때 사용한다.
+고객 id 별로 개별구매 아이템 금액의 합계를 집계하고 싶을때 사용합니다.
+SELECT mem_id, sum(amount) FROM market_db.buy group by mem_id;
+고객 id 별로 개별구매 아이템 금액의 최대금액을 집계하고 싶을때 사용합니다.
+SELECT mem_id, max(amount) FROM market_db.buy group by mem_id;
+고객 id 별로 개별구매 아이템 금액의 최소금액을 집계하고 싶을때 사용합니다.
+SELECT mem_id, min(amount) FROM market_db.buy group by mem_id;
+고객 id 별로 개별구매 아이템 금액의 평균금액을 집계하고 싶을때 사용합니다.
+SELECT mem_id, avg(amount) FROM market_db.buy group by mem_id;
+고객 id 별로 개별구매 아이템 금액의 구매건수를 집계하고 싶을때 사용합니다.
+SELECT mem_id, count(amount) FROM market_db.buy group by mem_id;
+
+집계 데이터는 계산해서 집계가 가능하다 + 내가 원하는 column 이름으로 설정가능
+SQL 에서 column의 이름을 지정하는 것을 별명(alias)의 사용이라 합니다.
+column의 이름과 별명(alias) 사이에 콤마가 들어가지 않습니다.
+SELECT mem_id "회원 아이디", sum(price * amount) "총 구매금액"
+FROM market_db.buy GROUP BY mem_id;
+
+GROUP BY로 집계 할 때 비교조건을 붙일 때 무엇을 해야하는지?
+집계 할 때는 WHERE 가 안됩니다. 같은 기능을 지원하는 HAVING 구문을 사용해야 합니다.
+1분 예제 : sum(price * amount) > 1000 이상인 친구에 한해서 집계 해주세요.
+정답:
+SELECT mem_id "회원 아이디", sum(price * amount) "총 구매금액"
+FROM market_db.buy GROUP BY mem_id HAVING sum(price * amount) > 1000;
+
+# auto_increment 기능의 시작점과 숫자 단위는 설정가능하다.
+예) 특정일 이후 중간 데이터는 10000으로 시작하고 33씩 증가시켜서 구분을 하고자 할 때
+ALTER TABLE hongong1 AUTO_INCREMENT = 10000;
+SET @@AUTO_INCREMENT_INCREMENT=33;
+
+데이터 생성 관련 구문은 별도의 파일에서 작업하는 것이 안전하다.
+
+update, delete 구문은 아래 옵션이 켜져 있으면 안됩니다. 안전모드를 해제하세요.
+[Edit] > [Preferences] > [SQL Editor]에서 안전모드(Safe mode)를 해제한다. --> 재시작
+
+데이터의 삭제를 보겠습니다.
+
+DROP TABLE IF EXISTS city_popul;
+CREATE TABLE city_popul (city_name CHAR(35), population INT);
+INSERT INTO city_popul SELECT NAME population FROM city;
+
+데이터 추가 후 new로 시작하는 도시이름을 모두 열람하고 싶을 때
+%와 같이 하나 이상의 아무 글자나 가리킬 수 있는 문자를 와일드카드문자라 합니다.
+와일드카드 사용 시, 정확히 매치한다의 =를 쓰면 안되고 like 구문으로 대체해야합니다.
+SELECT * FROM world.city_popul WHERE city_name LIKE 'new%';
+
+위 처럼 new 로 시작하는 도시를 열람하였습니다. 이제 열람한 데이터를 삭제해 보겠습니다.
+데이터 삭제는 행 전체가 삭제되므로 딱히 삭제할 컬럼 지정은 안해도 됩니다.
+DELETE FROM city_popul WHERE city_name LIKE 'new%';
+
+위 예제를 활용하여 빈값이 존재하는 데이터행을 날릴 수 있습니다.
+DELETE FROM 테이블명 WHERE 컬럼 is null;
+빈 값이 존재하는 데이터 행을 삭제하실 때 주의할 점은 빈값이 있는 데이터가 반드시 오류가 난 데이터는 아니라는 점 기억해주세요.
+
+데이터 삭제방식 3가지 DELETE, DROP, TRUNCATE
+예제로 봅시다. 아래의 쿼리문으로 삭제할 데이터셋을 만들어 보시죠.
+use world;
+DROP TABLE if EXISTS big_table1;
+DROP TABLE if EXISTS big_table2;
+DROP TABLE if EXISTS big_table3;
+CREATE TABLE big_table1 (SELECT * FROM world.city, sakila.country);
+CREATE TABLE big_table2 (SELECT * FROM world.city, sakila.country);
+CREATE TABLE big_table3 (SELECT * FROM world.city, sakila.country);
+
+위 쿼리문 입력하면 테이블 당 데이터가 44만줄 정도 나옵니다. 이유는?
+--> a.k.a join문은 왜 배우는가?
+--> 테이블 안의 데이터끼리 관계를 설정하지 않으면 중복을 허용하는 조합으로 데이터 생성이 된다. 즉,
+4079줄의 world.city 데이터의 각 행이 109줄의 sakila.country 데이터를 전부 가지면서
+109줄의 country 데이터가 4079번 반복되는 효과를 가지기 때문이다.
+N:N 관계의 예시(다대 다 관계)
+
+빅데이터의 삭제모드를 위한 아무 빅데이터셋이 필요해서 위 예시를 사용하였지만
+데이터 설계의 측면에선 좋지 않은 예시이다.
+
+데이터 삭제방식 3가지 DELETE, DROP, TRUNCATE의 적용
+-- # 빈테이블 양식은 남깁니다.
+-- DELETE FROM big_table1;
+-- # DROP 테이블 자체가 전부 날아갑니다. - 무지성 삭제 모드이고 무지성이니까 제일 빠르다.
+-- DROP TABLE big_table2;
+-- # TRUNCATE는 빈 테이블 양식은 남깁니다. - WHERE 구문이 없음. 즉 조건 없이 삭제함.
+-- TRUNCATE TABLE big_table3;
+
+소프트웨어의 기능과 성능은  반비례합니다.
+여러 사람의 의견을 물어서 이견없이 의견을 조율 할 때 물어보는 사람이 많을 수록 느리다.
+TRUNCATE 는 WHERE 비교 구문없이 삭제한다. --> 중간에게 누구에게 묻지않고 일처리함. 빠르다.
+
+조인은 inner join과 outer join 크게 두가지를 많이 쓴다
+1. inner join (내부조인)
+내부 조인은 primary key가 있는 정보에 한해서만 정보 표시
+그리고 데이터는 1:n 관계로 이루어져야한다.
+사번과 구매기록, 게임아이디와 게임 접속기록 등의 데이터 관계를 생각하자
+결국 primary key와 다른 테이블간의 "관계" 를 타나낸다.
+일대 다 관계 즉, 1:n 관계는 pk-fk 관계라고도 한다.
+
+use market_db;
+SELECT * FROM buy INNER JOIN member
+ON buy.mem_id = member.mem_id;
+
+inner join에서 *를 쓰면 양쪽 테이블의 모든 컬럼값을 가져옵니다.
+pk, fk는 의미적으로 동일한 데이터입니다. 그래서 중복결과를 가져왔습니다.
+그래서 join문을 할 때 일반적으로 * 말고 내가 가져오고 싶은 컬럼을 명시합니다.
+
+1:n 관계는 설명함
+n:n 관계는 무엇?
+학생과 대학 동아리 관계이다. 한 학생은 여러 동아리 가입되고 한 동아리는 여러 학생을 받을 수 있다.
+지금 드리는 이커머스 관련 데이터 예시로 다대다 관계를 말씀드리자면, 고객과 사용 구매플랫폼의 관계가 다대다 관계입니다.
+한명의 고객은 알리, 테무, 쿠팡, 지마켓 가입가능
+지마켓은 여러명의 고객 받을 수 있다.
+
+SELECT mem_id, prod_name, addr, price, amount FROM buy
+INNER JOIN member
+ON buy.mem_id = member.mem_id;
+
+join문을 쓸 때, 중복되는 컬럼 이름이 아니면 소속 테이블을 쓰지 않아도 실행은 됩니다.
+근데 나중에 다른 사람은 어디 테이블 소속의 컬럼 정보인지 모른다.
+어느 테이블 소속인지 전부 써두는 것이 좋다.
+
+테이블 이름이 길 경우
+쿼리문의 가독성이 떨어 질 수 있다.
+테이블에 별칭을 붙일 수 있다.
+
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+INNER JOIN member M
+ON B.mem_id = M.mem_id;
+
+테이블에 별칭을 붙이면 전부 다 별칭을 해야한다. 안그러면 컴퓨터가 알아보지 못한다.
+
+INNER JOIN은 양쪽 PK, FK에 모두 정보가 있는 결과만을 줍니다.
+즉, 구매한 적이 없거나 회원을 탈퇴하여 우리 DB에 아이디 정보가 없는 사람의 기록은 나오지 않습니다.
+
+구매금액, 고객아이디와 총 매출액을 매치해보려 할 때,
+INNER JOIN으로 데이터를 취합하면 어려움을 겪을 수 있습니다.
+
+만일 고객에게 감사장을 돌리고 싶어서 구매기록의 고객아이디 리스트를 뽑고 싶다면?
+
+외부 조인 (OUTER JOIN)
+외부 조인은 크게 LEFT OUTER JOIN, RIGHT OUTER JOIN
+두가지로 나뉘는데, 의미는 한쪽의 PK 혹은 매칭되는 FK에 있는 정보를 모두 뽑는다는 얘기다.
+우리 예시에는 탈퇴 걸그룹의 구매데이터는 없지만 있다고 가정해보자.
+
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+LEFT OUTER JOIN member M
+on B.mem_id = M.mem_id;
+
+왼쪽와 오른쪽의 순서를 아래처럼 바꿔보자 결과가 달라질 것이다.
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM member M
+LEFT OUTER JOIN buy B
+on B.mem_id = M.mem_id;
+
+알리 사장님이 오셔서 아이디만 있고 구매기록이 없는 분들을 뽑아서 쿠폰을 뿌리려합니다. 
+알리 월급날 쿠폰 이벤트 대상자 데이터만 뽑으려 한다면?
+WHERE B.PROD_NAME IS NULL 추가
+쿠팡 사장님은 구매기록이 있는 사람만 뽑으려 한다면 NOT을 붙이면 된다.
+
+자체조인입니다. 자기자신 테이블 값과 조인합니다.
+회사의 인사조직에서 사용합니다.
+예시 데이터의 EMP:담당자  MANAGER: 그 사람의 상관 PHONE: 전화번호
+QUESTION: 경리부장 상관의 전화번호를 알고싶다면???
+경리부장 상관의 전화번호를 알고싶다면?
+데이터베이스는 당장 그 사람의 전화번호를 알고있다.
+경리부장의 데이터로 그 사람의 상관 데이터인 관리이사를 알아내서
+그 관리이사의 전화번호데이터에 접근해야한다.
+
+1. 경리부장의 데이터에 접근하여 관리이사라는 상관 데이터를 입수한 후
+경리부장 관리이사 2222-1
+2. 관리이사 상관의 데이터와 직원관리이사 데이터를 조인시켜서 아래 정보에 접근하여
+전화번호 2222를 알아낸다.
+
+INNER JOIN, LEFT OUTER JOIN, RIGHT OUTER JOIN,  자체조인(SELF JOIN)
