@@ -78,3 +78,56 @@ SELECT empno "사번", ename "직원이름", sal "월급", sal * 1.5 "성과급"
 USE EMP2;
 SELECT * FROM emp;
 SELECT ename, deptno, sal FROM emp ORDER BY deptno asc, sal desc;
+
+<!-- 20240430 -->
+-- SELECT * FROM emp2.emp;
+-- SELECT ENAME, JOB, SAL FROM emp WHERE SAL >= 3000;
+
+# 이름이 SCOTT인 사원의 (emp 테이블 안 자료)
+# 이름, 월급, 직업, 입사일, 부서 번호를 출력하라
+SELECT ENAME, SAL, JOB, HIREDATE, DEPTNO FROM emp WHERE ENAME = 'SCOTT';
+
+# 데이터를 집계 할 때 일부데이터가 null 일 때
+# 직원별로 월급 + 커미션을 합산한 총 보수를 뽑고 싶을 때
+# 모든 빈 데이터가 틀린건 아니다, 커미션 데이터가 없는 사람은
+# 커미션을 받지 않는 조건으로 입사했다고 가정
+# 비어있는 커미션 데이터 자체를 수정해선 안돼
+# 단, 커미션 데이터가 없는 사람은 커미션 제외한 월급이 총 보수라 가정
+-- SELECT ename, sal+ifnull(comm, 0), job, hiredate, deptno from EMP;
+
+# 오라클에선 nvl 함수, mysql에선 ifnull 함수로 문제해결 가능
+# 센스 퀴즈 : 저기서 null 일으키지 않고 커미션 null 알아내는 법
+-- SELECT ename, sal+ifnull(comm, 0.0001), job, hiredate, deptno from EMP;
+
+# sal 컬럼은 월급 데이터라는걸 알았다.
+# 연봉이 20000 이상인 사원들의 이름과 연봉을 출력하라
+-- SELECT ENAME, SAL*12 FROM emp WHERE SAL * 12 >= 20000;
+
+# 직업이 SALESMAN이 아닌 직원들의
+# 이름과 부서번호, 직업을 출력하라
+-- SELECT ENAME, JOB, DEPTNO FROM EMP WHERE JOB != "SALESMAN";
+
+-- SELECT ENAME, SAL FROM EMP WHERE SAL 1000 BETWEEN 3000;
+
+# Q. 월급이 1000에서 3000 사이가 아닌 사원들의 이름과 월급을 출력하라
+-- SELECT ENAME, SAL FROM emp WHERE (SAL < 1000 OR SAL > 3000);
+
+# 이름의 첫 글자가 S로 시작하는 사원들의 이름과 월급을 출력하라
+SELECT ENAME, SAL FROM emp WHERE ENAME LIKE "S%";
+
+# 이름의 끝 글자가 T로 끝나는 사원들의 이름과 월급을 출력하라
+SELECT ENAME, SAL FROM emp WHERE ENAME LIKE "%T";
+
+# 이름에 A를 포함하고 있는 사원들의 이름을 출력하라
+SELECT ename, sal FROM emp WHERE ename LIKE "%A%";
+
+# 이름의 두 번째 철자가 M인 사원의 이름과 월급을 출력하라
+SELECT ename, sal FROM emp WHERE ename LIKE "_m%";
+# 이름의 세 번째 철자가 M인 사원의 이름과 월급을 출력하라
+SELECT ename, sal FROM emp WHERE ename LIKE "__m%";
+
+# 직업이 SALESMAN, ANALYST, MANAGER 인 사원들의 이름, 월급, 직업을 출력하라
+SELECT ename, job, sal FROM emp WHERE job IN ("SALESMAN", "ANALYST", "MANAGER");
+
+# 직업이 SALESMAN, ANALYST, MANAGER 이 아닌 사원들의 이름, 월급, 직업을 출력하라
+SELECT ename, job, sal FROM emp WHERE job NOT IN ("SALESMAN", "ANALYST", "MANAGER");
