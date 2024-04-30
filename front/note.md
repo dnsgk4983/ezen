@@ -777,3 +777,187 @@ QUESTION: 경리부장 상관의 전화번호를 알고싶다면???
 전화번호 2222를 알아낸다.
 
 INNER JOIN, LEFT OUTER JOIN, RIGHT OUTER JOIN,  자체조인(SELF JOIN)
+
+<!-- 20240430 -->
+테이블 간의 결합을 시키는 JOIN문
+거래처 별, 개인정보 별, 권한 별로 데이터가 분리되어 들어올 수 밖에 없습니다.
+예) 쿠팡 - 수많은 판매자를 유치하고 데이터 받기
+곰곰과 같은 자체 브랜드 입점업체가 많습니다.
+자체 브랜드 별 그들이 제출하는 상품, 쿠폰, 설명, q&a 데이터 등 데이터 테이블은 기본이 수백 테이블 됩니다.
+
+primary key & foreign key 와의 관계 유형에 대해 자세히 다룰 예정입니다.
+일반적으로 1:n의 관계가 데이터 관계지정에 좋다.
+primary key값 하나에 (주민번호 한개)
+foreign key값 데이터 여러개 (음주기록, 전과기록, 병역기록, 세금기록)
+시간의 흐름에 따라 데이터가 생성되는 경우가 많으므로 실제로는 n:n 관계도 많다
+
+그러면 n:n 관계는 무엇인가?
+대학생과 동아리의 관계 - 대학생은 여러 동아리 가입가능
+한 동아리도 여러명의 대학생 유치가능
+
+데이터를 가공한다 --> 목적에 맞게 데이터 변환 (group by)
+일별 카드 사용 내역을 합쳐서
+현대카드 3개월 명세서 합산하여 분기 별 소비액 보여준다.
+group by는 또다른 말로 "집계한다"고 합니다.
+집계용 함수 : sum(합산), avg(평균), max(최대), min(최소), count(개수세기)
+
+예시)
+고객 id별로 개별구매아이템 금액의 합계를 집계하고 싶을 때 사용
+SELECT mem_id, sum(amount) FROM market_db.buy GROUP BY mem_id;
+
+집계 할 때 수식 계산 기능을 지원합니다.
+SELECT mem_id, sum(price * amount) "총구매액" FROM market_db.buy GROUP BY mem_id;
+
+GROUP BY 기능으로 집계 할 때는 조건을 나타내는 WHERE 구문 사용이 불가합니다. 같은 기능으로 HAVING 이 있습니다.
+
+위 예제에서 총 구매금액을 따질때 구매액 1000 초과 고객만 뽑고 싶을 때는
+SELECT mem_id, sum(price * amount) "총 구매액" FROM market_db.buy GROUP BY mem_id HAVING sum(price * amount) > 1000;
+
+# primary key 안의 auto increment 기능 설명
+# AUTO INCREMENT 기능은 PRIMARY KEY에서 사용하는 기능인데 데이터 부재 시 자동으로 1씩 채워주는 기능이다.
+# 다른 컬럼에서는 사용하지 못한다. 데이터가 빈 것이 맞는 경우도 많다. (0이랑 데이터가 빈 것은 아예 다른 이야기다)
+
+USE market_db;
+DROP TABLE IF EXISTS hongong1
+
+# toy_id, toy_name, age 컬럼이 있는 hongong1 테이블을 만듭니다.
+CREATE TABLE hongong1 (toy_id INT AUTO_INCREMENT PRIMARY KEY, toy_name CHAR(4), age INT);
+set @@AUTO_INCREMENT_INCREMENT=1;
+INSERT INTO hongong1 VALUES (null, '안녕', 25);
+INSERT INTO hongong1 VALUES (null, '하이', 32);
+INSERT INTO hongong1 VALUES (null, '잘가', 42);
+
+PRIMARY KEY 안의 데이터는 중복값 불가, 빈값 불가
+그래서 시계열 데이터 집어넣을때는 미리 만들어진 데이터를 넣을 순 있어도 (특수한 조건) 원칙적으로 sql을 통한 PRIMARY KEY 데이터의 중복값은 허용되지 않는다.
+
+AUTO_INCREMENT 기능의 시작점과 숫자 단위는 설정가능하다
+원래는 1에서 시작해서 1식 증가해야하는데
+특정일 이후 중간 데이터는 10000으로 시작하고
+33씩 증가시켜서 구분을 하고자 할 때
+거래처 별로 PRIMARY KEY 값을 다르게 설정
+현대카드 관계자가 구매데이터 처리 할 때 거래처마다 고유의 PRIMARY KEY 값을 설정하려는 경우
+알리는 100만 쿠팡은 50만 지마켓은 1000만
+
+예시) hongong1 테이블의 AUTO_INCREMENT를 1만으로 시작하도록 하고 추가로 오는 데이터는 33씩 증가시킨다.
+주의 : 아래 쿼리문은 누적으로 실행되므로 별도의 쿼리파일에서 '순차적으로' 실행하세요.
+(데이터 만들고 나서 별도 파일에서 실행)
+ALTER TABLE hongong1 AUTO_INCREMENT = 10000;
+SET @@AUTO_INCREMENT_INCREMENT = 33;
+
+데이터의 삭제를 보겠습니다.
+삭제 예제를 해보려고 합니다.
+쿼리문을 실행하여 테이블을 생성하고 테이블 내 데이터를 추가합니다.
+삭제 예시를 보이기 위한 테이블 및 데이터 생성 쿼리문입니다.
+DROP TABLE IF EXISTS city_popul;
+CREATE TABLE city_popul (city_name CHAR(35), population INT);
+INSERT INTO city_popul SELECT NAME, population FROM city;
+
+# new 라고 시작하는 도시 이름을 끄집어 내기
+# %와 같은 와일드 카드 문자 사용 시 = 사인말고 like로 써야한다.
+SELECT * FROM world.city_popul WHERE city_name LIKE "new%";
+
+열람한 데이터를 삭제해보겠습니다.
+삭제 구문은 열람과 매우 유사한데, 컬럼지정이 필요하지 않습니다.
+DELETE FROM city_popul WHERE city_name LIKE "new%";
+
+특정 컬럼에서 빈값이 존재하는 데이터 행을 삭제 할 수 있습니다.
+이렇게 데이터 값이 있어야 할 자리에 데이터가 없는 데이터를 없애면서
+온전한 데이터만을 남기는 것을 데이터 클리닝, 클렌징 이런식으로 부릅니다.
+
+market_db 에서 buy 테이블 내 groupname 컬럼의 빈 데이터를 가진 불량데이터를 삭제하는 쿼리문입니다.
+이런식으로 빈 컬럼값을 가진 데이터를 없앨 수 있습니다.
+DELETE FROM market_db.buy WHERE group_name is null;
+
+데이터 삭제 3가지 방식: TRUNCATE, DELETE, DROP
+DROP : 테이블 구조까지 삭제
+DELETE : 조건 데이터만 삭제
+TRUNCATE : 조건없이 데이터만 삭제
+
+테이블 간의 결합을 시키는 JOIN 문은 데이터간의 관계를 파악해야 가능하다.
+구매데이터 테이블의 구매 목록은 누가 샀을까?
+이번 승진자 데이터 테이블에서 승진자는 누구일까?
+추석 소고기 설문조사 = 살치살은 누가 시킨걸까?
+
+INNER JOIN 실습
+market_db 안의 memeber & buy 테이블 정보에서 걸그룹 코드 데이터인
+PRIMARY KEY & FOREIGN KEY 모두 데이터가 있는 데이터만을 가져온다.
+
+누가 무엇을 구매했는지 확인하는 쿼리문을 작성해 보겠습니다.
+단, 양쪽 테이블이 동일한 이름을 쓰는 컬럼은 어디테이블인지 명시해야한다.
+SELECT * FROM buy --> SELECT buy.mem_id, prod_name, addr, price, amount FROM buy
+INNER JOIN member
+on buy.mem_id = member.mem_id;
+
+한마디로 mem_id 컬럼에 grl 데이터는 buy 테이블에도 값이 있어야 하고 member 테이블에도 값이 값이 있어야 한다.
+* 쓰면 중복된 컬럼도 그렇고 이용하지 않는 정보까지 들어오므로 join 구문 사용 시 원하는 컬럼을 지정하는게 좋다. (쿼리문이 느려진다)
+테이블을 명시하지 않으면 쿼리상으로 오류를 보여주지 않고 결과만 안나온다.
+
+테이블의 컬럼개수가 많은 것을 high-dimensional data 라 한다 (고차원 데이터)
+고차원 데이터는 계산 성능에 매우 좋지 않다
+데이터를 메모리에 입력 후 작업 할 때 데이터가 메모리를 많이 차지하므로 성능 효율성 측면에서 성능저하의 원인이 된다.
+연산 코어 수 = 택배일꾼 숫자
+메모리 = 도로
+고차원데이터의 이동이 어렵기 때문에 중간 결과를 보내고 받는게 느리다
+좁은 깔때기로 18리터 생수통물을 처리하는격으로
+고차원데이터는 연산성능에 불리하게 적용한다.
+
+그래서 테이블 이름을 명시함으로 데이터의 dimension 즉 데이터차원의 수를 통제하고 원하는 값만 불러와야
+후속 데이터 연산성능이 저하되지 않는다.
+
+어느 테이블 소속 컬럼인지 전부 달아주는 것이 협업에 도움이 된다.
+SELECT buy.mem_id, buy.prod_name, member.addr, buy.price, buy.amount FROM buy
+INNER JOIN member
+on buy.mem_id = member.mem_id;
+
+다만 테이블 이름을 입력 할 때 코드 가독성 이슈가 있으므로, 테이블에 별명을 달아줍니다.
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount FROM buy B
+INNER JOIN member M
+on B.mem_id = M.mem_id;
+
+UNnknown column 'buy.mem_id' in 'on clause' 0.000 sec
+
+INNER JOI은 양족 PK, FK에 모두 정보가 있는 결과만을 줍니다.
+즉, 구매한 적이 없거나 회원을 탈퇴하여 우리 DB에 아이디 정보가 없는 사람의 기록은 나오지 않습니다.
+
+탈퇴한 그룹이 물건 산 내역도 회계결산 차원에서 확인은 하고싶은 경우
+그 때 쓰는 것이 OUTER JOIN 구문입니다.
+외부조인은 LEFT OUTER JOIN , RIGHT OUTER JOIN 두가지가 있습니다.
+멤버 테이블에 데이터는 없지만 구매 기록에 있는 친구들은 다 불러오고 싶다면?
+
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+LEFT OUTER JOIN member M
+on B.mem_id = M.mem_id;
+
+아까 buy 테이블에 임시로 지금은 해체되고 없어서 member 테이블에 없는 룰라 데이터 입력을 시도하였습니다.
+그런데 데이터가 입력되지 않았습니다.
+이게 foreign key 값의 제약입니다.
+primary key에 대응하는 데이터가 없는 foreign key 데이터는 입력이 불가합니다.
+primary key와 foreign key의 관계를 해치는 경우, 데이터도 함부로 못지웁니다.
+
+# RIGHT OUTER JOIN 을 이용해서 member 테이블정보는 다 불러와야 한다면?
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+RIGHT OUTER JOIN member M
+on B.mem_id = M.mem_id;
+
+# 만약 왼쪽 오른쪽 모든 테이블에 존재하는 모든 정보를 다 합치고 싶다면?
+# union 구문으로 LEFT OUTER JOIN & RIGHT OUTER JOIN 두 정보를 합집합 처리한다.
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+LEFT OUTER JOIN member M
+on B.mem_id = M.mem_id
+union
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+RIGHT OUTER JOIN member M
+on B.mem_id = M.mem_id;
+
+# join 구문에도 where 절을 통한 조건문 설정이 가능합니다.
+# 구매기록이 없는 사람도 가팅 불러온다.
+# 구매기록이 없는 사람 조회해서 쿠폰을 뿌린다던지 할 때 정보조회가 가능하다.
+SELECT B.mem_id, B.prod_name, M.addr, B.price, B.amount
+FROM buy B
+RIGHT OUTER JOIN member M
+on B.mem_id = M.mem_id
+WHERE B.amount is null;
