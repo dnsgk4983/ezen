@@ -4,37 +4,40 @@ const express = require(`express`);
 const app = express();
 const port = 3000;
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.use(express.static(`public`));
 
 app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {
-    const htmlFilePath = path.join(__dirname, `views`, `index.html`);
-    res.sendFile(htmlFilePath);
-    
+    res.render(`index`);
 })
 // 코드 순서상 보기 편하게 restaurant을 먼저 상단에 배치합니다.
 app.get('/restaurants', (req, res) => {
-    const htmlFilePath = path.join(__dirname, `views`, `restaurants.html`);
-    res.sendFile(htmlFilePath);
+    const filePath = path.join(__dirname, 'data', 'restaurants.json');
+    const fileData = fs.readFileSync(filePath);
+    const storedRestaurants = JSON.parse(fileData);
+    res.render(`restaurants`, {
+        numberOfRestaurants: storedRestaurants.length,
+        restaurants: storedRestaurants,
+    });
 })
 
 // about
 app.get('/about', (req, res) => {
-    const htmlFilePath = path.join(__dirname, `views`, `about.html`);
-    res.sendFile(htmlFilePath);
+    res.render('about');
 })
 
 // confirm
 app.get('/confirm', (req, res) => {
-    const htmlFilePath = path.join(__dirname, `views`, `confirm.html`);
-    res.sendFile(htmlFilePath);
+    res.render(`confirm`);
 })
 
 // recommend
 app.get('/recommend', (req, res) => {
-    const htmlFilePath = path.join(__dirname, `views`, `recommend.html`);
-    res.sendFile(htmlFilePath);
+    res.render(`recommend`);
 })
 app.post('/recommend', (req, res) => {
     const restaurant = req.body;

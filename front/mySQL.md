@@ -131,3 +131,90 @@ SELECT ename, job, sal FROM emp WHERE job IN ("SALESMAN", "ANALYST", "MANAGER");
 
 # 직업이 SALESMAN, ANALYST, MANAGER 이 아닌 사원들의 이름, 월급, 직업을 출력하라
 SELECT ename, job, sal FROM emp WHERE job NOT IN ("SALESMAN", "ANALYST", "MANAGER");
+
+<!-- 20240501 -->
+# 사원테이블에서 최대 월급을 출력하라
+SELECT job, max(SAL)
+FROM EMP
+WHERE job
+IN ("SALESMAN");
+
+# WHERE 와 HAVING 사용법 정리
+# WHERE 는 HAVING 과 달리 그룹화 전에 조건이 처리가 된다.
+# 일반적으로 GROUP BY에서 WHERE 말고 HAVING을 권장하는 이유는
+# WHERE 절에서는 집계함수를 못씁니다.
+# 집계함수 : WHERE sum(price * amount) > 1000;
+# 단순 카테고리 추출은 WHERE가 허용됩니다
+# WHERE job = "salesman";
+# 조건을 통한 분류는 그래서 HAVING 사용을 언급하였습니다.
+
+# WHERE 로 카테고리 조건 처리하고 GROUP BY로 그룹화해서 HAVING으로 다시한번 조건처리는 가능합니다.
+# SQL 실행순서 측면에서 그룹화 전에 조건이 처리되므로 조건식, 연산
+# 수리적인 작업에서 논리적인 충돌이 발생하기 때문이다.
+# 지금 예제의 WHERE 는 단순 카테고리 분류이므로
+# 그룹화전에 조건이 처리되어도 무방하므로 예제가 잘 돌았다.
+# 그런데 비교식과 같은 수리연산은 실행순서에 따라 성립 할 수 없는 경우가
+# 생기기 때문에 이전 예제의 GROUP BY 이후 WHERE의 사용이 되지 않았다.
+
+# 직업 별 최소 월급을 뽑아주세요
+-- SELECT job, min(sal)
+-- FROM emp
+-- GROUP BY job 
+-- ORDER BY min(sal) desc;
+
+# 직업과 직업별 토탈 월급을 출력하는데 직업별 토탈 월급이 높은것 부터 출력하시오.
+-- SELECT job, sum(sal) FROM emp GROUP BY job ORDER BY sum(sal) desc;
+
+# 직업과 직업별 토탈 월급을 출력하는데
+# 직업별 토탈 월급이 4000 이상인 것만 출력하는 경우
+-- SELECT JOB, SUM(SAL)
+-- FROM emp
+-- GROUP BY JOB
+-- HAVING SUM(SAL) >= 4000;
+
+# 직업과 직업별 토탈 월급을 출력하는데
+# 직업에서 SALESMAN은 제외하고,
+# 직업별 토탈 월급이 4000 이상인 사원들만 출력하시오.
+-- SELECT JOB, SUM(SAL) FROM EMP WHERE NOT JOB = "SALESMAN" GROUP BY JOB HAVING SUM(SAL) >= 4000;
+
+# emp 테이블에서 null 값이 있는 데이터행의 개수를 출력해 주세요
+# emp 테이블 안을 보니
+# 모든 null 값이 있는 행 ㅔㄷ이터는 comm 컬럼이 null 이드라
+# comm 컬럼이 null 인 친구만 찾아서 개수를 세면 된다.
+# null은 null에 직접 개수를 셀 수 없는 문제가 있다.
+# 모든 데이터가 존재하는 아무 컬럼에서 데이터 개수를 세고
+# 그 데이터 개수에서 comm이 null 인 친구를 걸러내면 된다
+SELECT COUNT(ename)
+FROM emp
+WHERE comm is null;
+
+-- sqldb에서 userid가 jyp 인 친구의 모든 기록을 모든 테이블에 대해 뽑아주세요.(구매 기록과 배송정보를 모두 불러오고 싶습니다.)
+-- use sqldb;
+-- SELECT * FROM buytbl
+-- INNER JOIN usertbl
+-- ON buytbl.userID = usertbl.userid
+-- WHERE buytbl.userid = 'JYP';
+
+-- 한번이라도 물건을 구매한 사람들을 모두 찾아서 감사쿠폰을 뿌리고 싶습니다.
+-- 한번이라도 물건을 구매한 사람들을 찾아주세요
+-- SELECT distinct u.userid, u.name, u.addr
+-- FROM usertbl u
+-- INNER JOIN buytbl b
+-- ON u.userid = b.userid
+-- ORDER BY u.userid;
+
+-- 위 정답을 적당히 써서 한번도 물건을 구매하지 않은 사람들을 찾아주세요.
+-- 서브쿼리
+-- 아래 쿼리문으로 실행하면 두가지 이슈로 인해 에러가 난다.
+-- 1. != 사인은 단일값을 비교하는데 구매한 적이 있는 사람데이터 값은
+-- 복수이기 때문이다. 그래서 != 말고 not in 그룹값으로 처리가 필요하다.
+-- 2. 서브쿼리 결과 비교 시 서브쿼리 결과는 비교 구문 데이터와
+-- 일치가 필요하다. 근데 userid외에 name, addr까지 들어와서
+-- 비교가 되지 않는다.
+SELECT userid, name, addr
+FROM usertbl
+WHERE userid NOT IN (SELECT distinct u.userid
+FROM usertbl u
+INNER JOIN buytbl b
+ON u.userid = b.userid
+ORDER BY u.userid);
