@@ -9,13 +9,15 @@
 <body>
   <%- include('includes/header') %>
   <main id="post-detail">
-    <h1>...</h1>
+    <h1><%= post.title %></h1>
     <section id="post-meta">
-      ...
+      <!-- a 태그 클릭 시 작성자의 이메일 주소로 메일을 보낼 수 있습니다 -->
+      <address><a href="mailto:<%= post.author_email %>"><%= post.author_name %></a></address> |
+      <time datetime="<%= post.date %>"><%= post.humanReadableDate %></time>
     </section>
     <hr>
     <section>
-      <p id="body">...</p>
+      <p id="body"><%= post.body %></p>
     </section>
   </main>
 </body>

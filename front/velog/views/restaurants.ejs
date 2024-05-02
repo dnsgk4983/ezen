@@ -8,27 +8,31 @@
     <%- include('includes/header') %>
     <%- include('includes/side-drawer') %>
     <main>
-      <h1>Recommended restaurants</h1>
-      <p>Find your next favorite restaurants with help of our other users!</p>
-      <ul id="restaurants-list">
-        <% for (const restaurant of restaurants) { %>
-          <li class="restaurant-item">
-            <article>
-              <h2><%= restaurant.name %></h2>
-              <div class="restaurant-meta">
-                <p><%= restaurant.cuisine %></p>
-                <p><%= restaurant.address %></p>
-              </div>
-              <p>
-                <%= restaurant.description %>
-              </p>
-              <div class="restaurant-actions">
-                <a href="<%= restaurant.website %>">View Website</a>
-              </div>
-            </article>
-          </li>
-        <% } %>
-      </ul>
+      <h1>추천 음식점입니다.</h1>
+      <% if(numberOfRestaurants === 0) { %> 
+        <p>추천 음식점이 없습니다.</p>
+      <% } else { %>
+        <p><%= numberOfRestaurants %>개의 음식점을 찾았습니다.</p>
+        <ul id="restaurants-list">
+          <% for (const restaurant of restaurants) { %>
+            <li class="restaurant-item">
+              <article>
+                <h2><%= restaurant.name %></h2>
+                <div class="restaurant-meta">
+                  <p><%= restaurant.cuisine %></p>
+                  <p><%= restaurant.address %></p>
+                </div>
+                <p>
+                  <%= restaurant.description %>
+                </p>
+                <div class="restaurant-actions">
+                  <a href="<%= restaurant.website %>">View Website</a>
+                </div>
+              </article>
+            </li>
+          <% } %>
+        </ul>
+      <% } %>
     </main>
   </body>
 </html>
