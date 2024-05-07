@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <table border="1">
+        <tr>
+            <th>aa</th>
+            <th>bb</th>
+            <th>cc</th>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    aaaa
+                </div>
+            </td>
+            <td>
+                <div>
+                    bbbb
+                </div>
+            </td>
+            <td>
+                <div>
+                    cccc
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $("table td").click(function() {
+                let data = $(this).find('div').html();
+                console.log(data);
+            })
+        })
+    </script>
+</body>
+</html>

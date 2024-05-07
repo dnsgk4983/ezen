@@ -13,6 +13,10 @@
         <p>추천 음식점이 없습니다.</p>
       <% } else { %>
         <p><%= numberOfRestaurants %>개의 음식점을 찾았습니다.</p>
+        <form action="/restaurants" method="GET">
+          <input type="hidden" value="<%= nextOrder %>" name="order">
+          <button class="btn">순서바꾸기</button>
+        </form>
         <ul id="restaurants-list">
           <% for (const restaurant of restaurants) { %>
             <li class="restaurant-item">

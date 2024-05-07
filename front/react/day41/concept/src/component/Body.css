@@ -1,0 +1,5 @@
+/* 리액트 jsx 내부 css 표기법과 css 파일 표기법이 살짝 다른걸 확인가능합니다. */
+.body {
+    color: blue;
+    background-color: violet;
+}
