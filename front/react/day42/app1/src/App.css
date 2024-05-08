@@ -1,0 +1,38 @@
+body {
+  padding: 20px;
+}
+
+.App {
+  margin: 0 auto;
+  width: 500px;
+}
+
+.App > section {
+  padding: 20px;
+  background-color: rgb(245, 245, 245);
+  border: 1px solid rgb(240, 240, 240);
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.App > section .d-flex {
+  display: flex;
+  align-items: center;
+}
+.App > section .d-flex h1 {
+  margin: 0 0.25rem;
+}
+
+.App > section button {
+  border: 1px solid black;
+  border-radius: 0;
+  color: black;
+  margin-right: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  background: white;
+  cursor: pointer;
+}
+.App > section button:hover {
+  background: black;
+  color: white;
+}
