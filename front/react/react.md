@@ -297,3 +297,11 @@ state로 만듭니다. 문자열 데이터를 받아서 state상 일치하는 �
 리액트는 SPA(single page application)
 페이지 처음 로딩 시 html 하나로 됩니다.
 처음 로딩할 때 느려도 페이지 이동 시 속도가 빠릅니다.
+
+<!-- 20240510 -->
+동적경로의 표현하기 위해서
+1. app.js 내부 diary 경로에 /:id 로 주소를 오픈하곘다고 말해줍니다.
+2. diary.js에 가서 id값을 설정합니다.
+
+useParams : 경로에 포함된 url 파라미터를 객체형태로 변환
+useSearchParams: url 쿼리 스트링 사용을 돕는다.

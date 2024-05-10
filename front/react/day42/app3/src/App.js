@@ -1,11 +1,18 @@
+import { Routes, Route, Link } from "react-router-dom";
+import { useReducer, useRef } from "react";
 import './App.css';
-import { Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import New from './pages/New';
 import Diary from './pages/Diary';
 import Edit from './pages/Edit';
 
+function reducer(state, action) {
+  return state
+}
+
 function App() {
+  const [data, dispatch] = useReducer(reducer, []);
+  const idRef = useRef(0);
   return (
     <div className="App">
       {

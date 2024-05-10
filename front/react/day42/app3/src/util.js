@@ -21,3 +21,46 @@ export const getEmotionImgById  = (emotionId) => {
             return null;
     }
 }
+
+export const emotionList = [
+    {
+        id: 1,
+        name: "아주 좋음",
+        img: getEmotionImgById(1),
+    },
+    {
+        id: 2,
+        name: "살짝 좋음",
+        img: getEmotionImgById(2)
+    },
+    {
+
+        id:3,
+        name: "보통",
+        img: getEmotionImgById(3)
+    },
+    {
+        id: 4,
+        name: "살짝 나쁨",
+        img: getEmotionImgById(4)
+    },
+    {
+        id: 5,
+        name: "아주 나쁨",
+        img: getEmotionImgById(5)
+    }
+]
+
+// 날짜 객체를 받으면 (1/1000 초 단위의 큰 수) 우리가 알아볼 수 있게 변환해서 표시하는 함수
+export const getFormattedDate = (targetDate) => {
+    let year = targetDate.getFullYear(); //eslint-disable-line no-unused-vars
+    let month = targetDate.getMonth() + 1;
+    let date = targetDate.getDate();
+    if (month < 10) {
+        month = `0${month}`
+    }
+    if (date < 10) {
+        date = `0${date}`
+    }
+    return `${year}-${month}-${date}`
+}
