@@ -1,0 +1,494 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+header nav {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  transition: background 0.5s;
+}
+header nav .logo a {
+  display: block;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+header nav ul {
+  display: flex;
+  align-items: center;
+}
+header nav ul li {
+  margin: 0 0.75rem;
+}
+header nav ul li:last-child {
+  margin-right: 0;
+}
+header nav ul li a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 0.25rem 0;
+  overflow: hidden;
+}
+header nav ul li a:before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  left: -100%;
+  transition: all 0.5s;
+  background: #fff;
+}
+header nav ul li a:hover::before {
+  left: 0;
+}
+@keyframes menuMotion {
+  100% {
+    width: 100%;
+  }
+}
+header nav.fix {
+  background: rgba(0, 0, 0, 0.66);
+}
+
+footer {
+  background: #f3f3f3;
+}
+footer .innerWrap {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem 0;
+}
+footer .innerWrap .logo {
+  margin-right: 1.25rem;
+}
+footer .innerWrap .logo a {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+footer .innerWrap .infoList {
+  margin: 1rem 0;
+}
+footer .innerWrap .infoList ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+footer .innerWrap .infoList ul:last-child {
+  margin-bottom: 0;
+}
+footer .innerWrap .infoList ul li {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #333;
+  margin-right: 0.75rem;
+  padding-right: 0.75rem;
+}
+footer .innerWrap .infoList ul li:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 1px;
+  height: 0.5rem;
+  top: 50%;
+  background: #ccc;
+  transform: translateY(-50%);
+}
+footer .innerWrap .infoList ul li:last-child {
+  padding-right: 0;
+}
+footer .innerWrap .infoList ul li:last-child:after {
+  display: none;
+}
+footer .innerWrap .copy small {
+  font-size: 0.75rem;
+  color: #666;
+}
+footer .innerWrap .copy small span {
+  font-weight: 700;
+}
+
+.fix-menu {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+}
+.fix-menu ul li {
+  margin-bottom: 0.5rem;
+}
+.fix-menu ul li:last-child {
+  margin-bottom: 0;
+}
+.fix-menu ul li a {
+  position: relative;
+  display: block;
+  color: #333;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1.25rem 0.75rem;
+  border: 1px solid #666;
+}
+.fix-menu ul li a:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  transform: rotate(45deg) translateY(-50%);
+  transform-origin: center center;
+  border-top: 1px solid #333;
+  border-right: 1px solid #333;
+  transition: all 0.3s;
+}
+.fix-menu ul li a:hover:after {
+  right: 1.25rem;
+}
+
+/* http://meyerweb.com/eric/tools/css/reset/
+   v5.0.2 | 20191019
+   License: none (public domain)
+*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* HTML5 hidden-attribute fix for newer browsers */
+*[hidden] {
+  display: none;
+}
+
+body {
+  line-height: 1;
+}
+
+menu,
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+  text-indent: -999em;
+}
+
+body {
+  font-family: "Noto Sans KR", Arial, Helvetica, sans-serif;
+  line-height: 1.2;
+}
+
+.innerWrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+@media (max-width: 1240px) {
+  .innerWrap {
+    padding: vw(0 40px);
+  }
+}
+
+.kv-wrapper {
+  position: relative;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+.kv-wrapper .swiper-container {
+  height: 100%;
+}
+.kv-wrapper .swiper-slide {
+  position: relative;
+  overflow: hidden;
+}
+.kv-wrapper .swiper-slide img {
+  display: block;
+  transform: scale(1.15);
+  transform-origin: center center;
+  transition: 3s;
+}
+.kv-wrapper .swiper-slide .text-content {
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+}
+.kv-wrapper .swiper-slide .text-content p {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition-delay: 300ms;
+  transition: opacity ease 1s, transform 1s;
+}
+.kv-wrapper .swiper-slide .text-content span {
+  display: block;
+  font-size: 1.25rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity ease 1s, transform 1s;
+  transition-delay: 600ms;
+}
+.kv-wrapper .swiper-slide:before {
+  z-index: 5;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.66);
+}
+.kv-wrapper .swiper-slide-active {
+  z-index: 2;
+}
+.kv-wrapper .swiper-slide-active img {
+  transform: scale(1);
+}
+.kv-wrapper .swiper-slide-active .text-content p {
+  opacity: 1;
+  transform: translateY(0);
+}
+.kv-wrapper .swiper-slide-active .text-content span {
+  opacity: 1;
+  transform: translateY(0);
+}
+.kv-wrapper .swiper-pagination {
+  z-index: 50;
+}
+.kv-wrapper .swiper-pagination-bullet {
+  width: 2.5rem;
+  height: 0.625rem;
+  cursor: pointer;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.7);
+}
+.kv-wrapper .swiper-pagination-bullet-active {
+  background: #fff;
+}
+
+main .innerWrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.productSec {
+  padding: 5rem 0;
+}
+.productSec .product-detail h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+}
+.productSec .product-photo ul {
+  display: flex;
+  justify-content: space-between;
+}
+.productSec .product-photo ul li {
+  flex-basis: 32%;
+}
+.productSec .product-photo ul li a {
+  position: relative;
+  display: block;
+  text-align: center;
+  overflow: hidden;
+}
+.productSec .product-photo ul li a .photo {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.productSec .product-photo ul li a .photo img {
+  display: block;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.productSec .product-photo ul li a p {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  margin-top: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+.productSec .product-photo ul li a span {
+  font-size: 0.875rem;
+  color: #666;
+}
+.productSec .product-photo ul li a:hover .photo img {
+  transform: scale(1.02);
+}
+.productSec .product-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+.productSec .product-more a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+  padding: 0.75rem 2.5rem;
+  border: 1px solid #333;
+  border-left: none;
+  border-right: none;
+  transition: all 0.3s;
+}
+.productSec .product-more a:hover {
+  color: white;
+  background: #333;
+}
