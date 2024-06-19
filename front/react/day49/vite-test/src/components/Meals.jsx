@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
-import MealItem from "./MealItem";
+import useHttp from "../hooks/useHttp.js";
+import Error from "./Error.jsx";
+import MealItem from "./MealItem.jsx";
+
+const requestConfig = {};
 
 export default function Meals() {
-  const [loadedMeals, setLoadedMeals] = useState([]);
+  const {
+    data: loadedMeals,
+    isLoading,
+    error,
+  } = useHttp("http://localhost:3000/meals", requestConfig, []);
 
-  useEffect(() => {
-    async function fetchMeals() {
-      // 백엔드 서버에 있는 메뉴 데이터 접근
-      const response = await fetch("http://localhost:3000/meals");
+if (isLoading) {
+  return <p className="center"> 식사데이터 로딩중...</p>
+}
 
-      if (!response.ok) {
-        // 오류 메세지 나중에 추가
-      }
+if (error) {
+  return <Error title="식사데이터 로딩에 실패하였습니다" message={error} />
+}
 
-      const meals = await response.json();
-      setLoadedMeals(meals);
-    }
 
-    fetchMeals();
-  }, []);
 
   return (
     <ul id="meals">
